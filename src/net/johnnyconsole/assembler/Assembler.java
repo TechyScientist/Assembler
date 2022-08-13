@@ -25,6 +25,48 @@ public class Assembler {
                                 RDC = new byte[32],
                                 RDD = new byte[32];
 
+    private static int lex() {
+        lexLen = 0;
+        lexeme = new char[lexeme.length];
+        getNonBlank();
+        switch(charClass) {
+            case LETTER:
+                addChar();
+                getChar();
+                while(charClass == LETTER) {
+                    addChar();
+                    getChar();
+                }
+                nextToken = IDENT;
+                break;
+            case DIGIT:
+                addChar();
+                getChar();
+                while(charClass == DIGIT) {
+                    addChar();
+                    getChar();
+                }
+                nextToken = INT_LIT;
+                break;
+            case UNKNOWN:
+                lookup(nextChar);
+                getChar();
+                break;
+            case EOF:
+                nextToken = EOF;
+                lexeme[0] = 'E';
+                lexeme[1] = 'O';
+                lexeme[2] = 'F';
+                lexeme[3] = 0;
+                return nextToken;
+        }
+        if(lexLen == 0) {
+            return lex();
+        }
+
+        return nextToken;
+    }
+
     private static String trim(char[] array) {
         StringBuilder s = new StringBuilder();
         for (char c : array) {
