@@ -24,4 +24,69 @@ public class Assembler {
                                 RDB = new byte[32],
                                 RDC = new byte[32],
                                 RDD = new byte[32];
+
+    private static String trim(char[] array) {
+        StringBuilder s = new StringBuilder();
+        for (char c : array) {
+            if (c == 0 || c == '\n') break;
+            s.append(c);
+        }
+        return s.toString();
+    }
+
+    private static void addChar() {
+        if(lexLen <= 98) {
+            lexeme[lexLen++] = nextChar;
+            lexeme[lexLen] = '\0';
+        }
+        else throw new AssemblerException("Lexeme too long");
+    }
+
+    private static void getChar() {
+        while(line == null || line.length() == 0) {
+            try {
+                line = in_fp.nextLine();
+                lineNo++;
+            } catch(Exception ex) {
+                charClass = EOF;
+                return;
+            }
+        }
+        nextChar = line.charAt(0);
+        line = line.substring(1);
+        if(Character.isAlphabetic(nextChar)) {
+            charClass = LETTER;
+        }
+        else if(Character.isDigit(nextChar)) charClass = DIGIT;
+        else charClass = UNKNOWN;
+    }
+
+
+    private static void getNonBlank() {
+        while(Character.isWhitespace(nextChar) || nextChar == 0)
+            getChar();
+    }
+
+    private static void lookup(char ch) {
+        switch(ch) {
+            case ',':
+                addChar();
+                nextToken = COMMA;
+                break;
+            case '.':
+                addChar();
+                nextToken = PERIOD;
+                break;
+            case ':':
+                addChar();
+                nextToken = COLON;
+                break;
+            case ';':
+                addChar();
+                nextToken = SEMICOLON;
+                break;
+            default:
+                if(!inComment) throw new AssemblerException("Invalid Symbol: " + ch);
+        }
+    }
 }
