@@ -1,0 +1,10 @@
+<add> -> ADD <byte_register>, <byte_register> | ADD <word_register>, <word_register> | ADD <dword_register>, <dword_register>
+<sub> -> SUB <byte_register>, <byte_register> | SUB <word_register>, <word_register> | SUB <dword_register>, <dword_register>
+<mul> -> MUL <byte_register>, <byte_register> | MUL <word_register>, <word_register> | MUL <dword_register>, <dword_register>
+<div> -> DIV <byte_register>, <byte_register> | DIV <word_register>, <word_register> | DIV <dword_register>, <dword_register>
+<mod> -> MOD <byte_register>, <byte_register> | MOD <word_register>, <word_register> | MOD <dword_register>, <dword_register>
+
+<shift_left> -> SRL <register>, <immediate>
+<shift_right> -> SRR <register>, <immediate>
+<rotate_left> -> RRL <register>, <immediate>
+<rotate_right> -> RRR <register>, <immediate>
