@@ -67,6 +67,48 @@ public class Assembler {
         return nextToken;
     }
 
+    private static boolean parse() {
+        lex();
+        if(trim(lexeme).equals("ASSEMBLER")) {
+            lex();
+            if(trim(lexeme).equals("BEGIN")) {
+                lex();
+                if(nextToken == COLON) {
+                    lex();
+                    statements();
+                    if(trim(lexeme).equals("ASSEMBLER")) {
+                        lex();
+                        if (trim(lexeme).equals("END")) {
+                            lex();
+                            if (nextToken == SEMICOLON) return true;
+                            else throw new AssemblerException("Missing symbol ';' at end of ASSEMBLER END directive");
+                        }
+                        else throw new AssemblerException("Missing END directive");
+                    }
+                    else throw new AssemblerException("Missing ASSEMBLER directive");
+                }
+                else throw new AssemblerException("Missing symbol ':' at end of ASSEMBLER BEGIN directive");
+            }
+            else throw new AssemblerException("Missing BEGIN directive, or missing symbol ':' at end of ASSEMBLER BEGIN directive");
+        }
+        else throw new AssemblerException("Missing ASSEMBLER directive");
+    }
+
+    private static void statements() {
+        while(!trim(lexeme).equals("ASSEMBLER")) {
+            statement();
+            //CMT directive wll lex the period
+            if(nextToken != PERIOD) lex();
+            if(nextToken != PERIOD) throw new AssemblerException("Missing symbol '.' at end of statement on line " + lineNo);
+            lex();
+        }
+    }
+
+    private static void statement() {
+        String statement = trim(lexeme);
+
+    }
+
     private static String trim(char[] array) {
         StringBuilder s = new StringBuilder();
         for (char c : array) {
