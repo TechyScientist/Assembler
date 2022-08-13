@@ -1,6 +1,22 @@
 # Assembler
 Java-based, interpreted assembly language using a top-down recursive descent parsing algorithm
 
+### Register Layout
+ASSEMBLER uses data types similar to the Intel x86 assembler. Registers are either byte (8 bits/1 byte), word (16 bits/2 bytes) or doubleword (aka dword, 32 bits/4 bytes).
+
+##### Doubleword registers
+RAD, RBD, RCD, RDD
+
+##### Word Registers
+*Word registers are the __lower__ 16 bits of the doubleword register of the same letter.*
+
+RAW, RBW, RCW, RDW
+
+##### Byte Registers
+*Each word register can be represented as __two__ byte registers, represented with the same letter, and __H__ for the __upper__ 8 bits and __L__ for the __lower__ 8 bits.*
+
+RAH, RAL, RBH, RBL, RCH, RCL, RDH, RDL
+
 ### Instruction Set
 The current instruction set for ASSEMBLER includes 7 instructions and 6 directives.
 
