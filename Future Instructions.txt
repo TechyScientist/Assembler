@@ -8,3 +8,6 @@
 <shift_right> -> SRR <register>, <immediate>
 <rotate_left> -> RRL <register>, <immediate>
 <rotate_right> -> RRR <register>, <immediate>
+
+<negate> -> NEG <register>
+<complement> -> COM <register>
