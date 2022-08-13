@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+@SuppressWarnings("DuplicatedCode")
 public class Assembler {
     private static int charClass, lexLen, nextToken, lineNo = -1;
     private static char nextChar;
@@ -21,6 +22,7 @@ public class Assembler {
     private static final int INT_LIT = 10, IDENT = 11, COMMA = 20, PERIOD = 21, COLON = 22, SEMICOLON = 23;
 
     //Flags: S Z O D P A
+    @SuppressWarnings("unused")
     private static final byte[] FLAGS = new byte[5],
                                 RLP = new byte[32],
                                 RAD = new byte[32],
