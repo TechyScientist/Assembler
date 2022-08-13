@@ -130,6 +130,15 @@ public class Assembler {
                     throw new AssemblerException("Invalid Immediate for MIM on line " + lineNo);
                 }
                 break;
+            case "MEX":
+                lex();
+                String src = trim(lexeme);
+                lex();
+                if(nextToken != COMMA) throw new AssemblerException("Missing symbol ',' for MEX on line " + lineNo);
+                lex();
+                String dest = trim(lexeme);
+                mex(src, dest);
+                break;
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
@@ -537,6 +546,364 @@ public class Assembler {
             }
         }
         else throw new AssemblerException("Incorrect Register for MIM: \"" + register + "\"");
+    }
+
+    private static void mex(String src, String dest) {
+        if(arrayContains(BYTE_REGISTERS, src) && arrayContains(WORD_REGISTERS, dest)) {
+            byte[] newBits = new byte[16];
+            switch(src) {
+                case "RAL":
+                    System.arraycopy(RAD, 24, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RAH":
+                    System.arraycopy(RAD, 16, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RBL":
+                    System.arraycopy(RBD, 24, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RBH":
+                    System.arraycopy(RBD, 16, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RCL":
+                    System.arraycopy(RCD, 24, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RCH":
+                    System.arraycopy(RCD, 16, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RDL":
+                    System.arraycopy(RDD, 24, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+                case "RDH":
+                    System.arraycopy(RDD, 16, newBits, 8, 8);
+                    switch(dest) {
+                        case "RAW":
+                            System.arraycopy(newBits, 0, RAD, 16,16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(newBits, 0, RBD, 16,16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(newBits, 0, RCD, 16,16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(newBits, 0, RDD, 16,16);
+                            break;
+                    }
+                    break;
+            }
+
+        } else if(arrayContains(BYTE_REGISTERS, src) && arrayContains(DWORD_REGISTERS, dest)) {
+            byte[] newBits = new byte[32];
+            switch(src) {
+                case "RAL":
+                    System.arraycopy(RAD, 24, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RAH":
+                    System.arraycopy(RAD, 16, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RBL":
+                    System.arraycopy(RBD, 24, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RBH":
+                    System.arraycopy(RBD, 16, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RCL":
+                    System.arraycopy(RCD, 24, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RCH":
+                    System.arraycopy(RCD, 16, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RDL":
+                    System.arraycopy(RDD, 24, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+                case "RDH":
+                    System.arraycopy(RDD, 16, newBits, 24, 8);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0,32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0,32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0,32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0,32);
+                            break;
+                    }
+                    break;
+            }
+        }
+        else if(arrayContains(WORD_REGISTERS, src) && arrayContains(DWORD_REGISTERS, dest)) {
+            byte[] newBits = new byte[32];
+            switch(src) {
+                case "RAW":
+                    System.arraycopy(RAD, 16, newBits,  16, 16);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0, 32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RBW":
+                    System.arraycopy(RBD, 16, newBits, 16, 16);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0, 32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RCW":
+                    System.arraycopy(RCD, 16, newBits, 16, 16);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0, 32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RDW":
+                    System.arraycopy(RDD, 16, newBits, 16, 16);
+                    switch(dest) {
+                        case "RAD":
+                            System.arraycopy(newBits, 0, RAD, 0, 32);
+                            break;
+                        case "RBD":
+                            System.arraycopy(newBits, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(newBits, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(newBits, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+            }
+        } else throw new AssemblerException("Invalid Instruction format for MEX");
     }
 
     private static String trim(char[] array) {
