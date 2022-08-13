@@ -46,6 +46,7 @@ Instruction mnemonics are three letters in length and take a comma-seperated lis
 | RIN          | Input to Register         | One Register                                                             | ---          |
 
 ### Language Specification
-[Language Specification](Language Specification.txt)
+A complete EBNF spcecification can be found in the included Language Specification.txt file.
+
 ### Future Instructions
-[Future Instructions](Future Instructions.txt)
+Currently planned future instructions, including their EBNF definitions, can be found in the included Future Instructions.txt file.
