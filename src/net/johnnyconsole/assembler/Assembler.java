@@ -116,6 +116,20 @@ public class Assembler {
                 String reg2 = trim(lexeme);
                 mov(reg1, reg2);
                 break;
+            case "MIM":
+                try {
+                    lex();
+                    int immediate = Integer.parseInt(trim(lexeme));
+                    lex();
+                    if (nextToken != COMMA)
+                        throw new AssemblerException("Missing symbol ',' for MIM on line " + lineNo);
+                    lex();
+                    String register = trim(lexeme);
+                    mim(immediate, register);
+                } catch (NumberFormatException ex) {
+                    throw new AssemblerException("Invalid Immediate for MIM on line " + lineNo);
+                }
+                break;
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
@@ -457,6 +471,72 @@ public class Assembler {
             }
 
         } else throw new AssemblerException("Instruction operands (" + src + ", " + dest + ") must be the same size for MOV instruction");
+    }
+
+    private static void mim(int immediate, String register) {
+        if(arrayContains(BYTE_REGISTERS, register)) {
+            byte[] bits = toBinaryArray(immediate, 8);
+            switch(register) {
+                case "RAL":
+                    System.arraycopy(bits, 0, RAD, 24,8);
+                    break;
+                case "RAH":
+                    System.arraycopy(bits, 0, RAD, 16, 8);
+                    break;
+                case "RBL":
+                    System.arraycopy(bits, 0, RBD, 24,8);
+                    break;
+                case "RBH":
+                    System.arraycopy(bits, 0, RBD, 16, 8);
+                    break;
+                case "RCL":
+                    System.arraycopy(bits, 0, RCD, 24,8);
+                    break;
+                case "RCH":
+                    System.arraycopy(bits, 0, RCD, 16, 8);
+                    break;
+                case "RDL":
+                    System.arraycopy(bits, 0, RDD, 24,8);
+                    break;
+                case "RDH":
+                    System.arraycopy(bits, 0, RDD, 16, 8);
+                    break;
+            }
+        }
+        else if(arrayContains(WORD_REGISTERS, register)) {
+            byte[] bits = toBinaryArray(immediate, 16);
+            switch (register) {
+                case "RAW":
+                    System.arraycopy(bits, 0, RAD, 16, 16);
+                    break;
+                case "RBW":
+                    System.arraycopy(bits, 0, RBD, 16, 16);
+                    break;
+                case "RCW":
+                    System.arraycopy(bits, 0, RCD, 16, 16);
+                    break;
+                case "RDW":
+                    System.arraycopy(bits, 0, RDD, 16, 16);
+                    break;
+            }
+        } else if(arrayContains(DWORD_REGISTERS, register)) {
+            byte[] bits = toBinaryArray(immediate, 32);
+            switch (register) {
+                case "RAD":
+                    System.arraycopy(bits, 0, RAD, 0, 32);
+                    break;
+                case "RBD":
+                    System.arraycopy(bits, 0, RBD, 0, 32);
+                    break;
+                case "RCD":
+                    System.arraycopy(bits, 0, RCD, 0, 32);
+                    break;
+                case "RDD":
+                    System.arraycopy(bits, 0, RDD, 0, 32);
+                    break;
+            }
+        }
+        else throw new AssemblerException("Incorrect Register for MIM: \"" + register + "\"");
     }
 
     private static String trim(char[] array) {
