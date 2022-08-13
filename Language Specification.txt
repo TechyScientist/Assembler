@@ -1,0 +1,13 @@
+<register> -> <byte_register> | <word_register> | <dword_register>
+<byte_register> -> RAL | RAH | RBL | RBH | RCL | RCH | RDL | RDH
+<word_register> -> RAW | RBW | RCW | RDW
+<dword_register> -> RAD | RBD | RCD | RDD
+
+<immediate> -> (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9){0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0}
+<string> -> any combination of characters
+
+<program> -> ASSEMBLER BEGIN: {<statements>} ASSEMBLER END;
+
+<statements> -> {<statement>.}
+
+<statement> ->
