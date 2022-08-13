@@ -172,7 +172,12 @@ public class Assembler {
                 }
                 inComment = false;
                 break;
-
+            case "RIN": {
+                lex();
+                String register = trim(lexeme);
+                rin(register);
+                break;
+            }
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
@@ -1017,6 +1022,21 @@ public class Assembler {
             System.out.println(Arrays.toString(breg));
         }
         else throw new AssemblerException("Incorrect Register for PBR: \"" + register + "\"");
+    }
+
+    private static void rin(String register) {
+        try {
+            System.out.print("RIN > ");
+            int in = input.nextInt();
+            mim(in, register);
+        } catch (AssemblerException ex) {
+            if(ex.getMessage().contains("MIM")) {
+                throw new AssemblerException("Incorrect Register for RIN: \"" + register + "\"");
+            }
+            else {
+                throw ex;
+            }
+        }
     }
 
     private static String trim(char[] array) {

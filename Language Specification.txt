@@ -11,7 +11,7 @@
 <statements> -> {<statement>.}
 
 <statement> -> <move> | <move_imm> | <move_extend> | <print_byte_register> | <print_word_register> |
-               <print_dword_register> | <comment> | <block_comment>
+               <print_dword_register> | <comment> | <block_comment> | <input>
 
 Uses Source-First Operand Ordering
 <move> -> MOV <byte_register>, <byte_register> | MOV <word_register>, <word_register> | MOV <dword_register>, <dword_register>
@@ -24,3 +24,5 @@ Uses Source-First Operand Ordering
 
 <comment> -> CMT <string>
 <block_comment> -> BCM <string> ECM
+
+<input> -> RIN <register>
