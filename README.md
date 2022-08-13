@@ -45,5 +45,7 @@ Instruction mnemonics are three letters in length and take a comma-seperated lis
 | PDR          | Print Doubleword Register | One Doubleword Register                                                  | ---          |
 | RIN          | Input to Register         | One Register                                                             | ---          |
 
-### [Language Specification](Language Specification.txt)
-### [Future Instructions](Future Instructions.txt)
+### Language Specification
+[Language Specification](Language Specification.txt)
+### Future Instructions
+[Future Instructions](Future Instructions.txt)
