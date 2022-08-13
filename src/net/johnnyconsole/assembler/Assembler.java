@@ -158,6 +158,21 @@ public class Assembler {
                 pdr(register);
                 break;
             }
+            case "CMT":
+                inComment = true;
+                while (nextToken != PERIOD) {
+                    lex();
+                }
+                inComment = false;
+                break;
+            case "BCM":
+                inComment = true;
+                while (!trim(lexeme).equals("ECM")) {
+                    lex();
+                }
+                inComment = false;
+                break;
+
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
