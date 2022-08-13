@@ -1,5 +1,7 @@
 package net.johnnyconsole.assembler;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -25,6 +27,24 @@ public class Assembler {
                                 RBD = new byte[32],
                                 RCD = new byte[32],
                                 RDD = new byte[32];
+
+    public static void main(String[] args) {
+        input = new Scanner(System.in);
+        String filename = "AssemblerInput.asmblr";
+        try {
+            if (args.length == 2 && (args[0].equals("-input") || args[0].equals("-i") || args[0].equals("-assemble") || args[0].equals("-a"))) {
+                filename = args[1];
+            }
+            if (!filename.endsWith(".asmblr"))
+                throw new AssemblerException("Incorrect file type: \"" + filename.substring(filename.indexOf('.')) + "\"");
+            File file = new File(filename);
+            in_fp = new Scanner(file);
+            System.out.println("Executing ASSEMBLER code from input file: " + filename + "...");
+            if(parse()) System.out.println("ASSEMBLER file executed successfully.");
+        } catch(FileNotFoundException ex) {
+            throw new AssemblerException("Could not open input file \"" + filename + "\"");
+        }
+    }
 
     private static int lex() {
         lexLen = 0;
