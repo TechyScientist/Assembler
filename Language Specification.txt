@@ -10,9 +10,14 @@
 
 <statements> -> {<statement>.}
 
-<statement> -> <move> | <move_imm> | <move_extend>
+<statement> -> <move> | <move_imm> | <move_extend> | <print_byte_register> | <print_word_register> |
+               <print_dword_register>
 
 Uses Source-First Operand Ordering
 <move> -> MOV <byte_register>, <byte_register> | MOV <word_register>, <word_register> | MOV <dword_register>, <dword_register>
 <move_imm> -> MIM <immediate>, <register>
 <move_extend> -> MEX <byte_register>, <word_register> | MEX <byte_register>, <dword_register> | MEX <word_register>, <dword_register>
+
+<print_byte_register> -> PBR <byte_register>
+<print_word_register> -> PWR <word_register>
+<print_dword_register> -> PDR <dword_register>

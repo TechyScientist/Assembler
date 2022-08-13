@@ -1,5 +1,6 @@
 package net.johnnyconsole.assembler;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Assembler {
@@ -139,6 +140,24 @@ public class Assembler {
                 String dest = trim(lexeme);
                 mex(src, dest);
                 break;
+            case "PBR": {
+                lex();
+                String register = trim(lexeme);
+                pbr(register);
+                break;
+            }
+            case "PWR": {
+                lex();
+                String register = trim(lexeme);
+                pwr(register);
+                break;
+            }
+            case "PDR": {
+                lex();
+                String register = trim(lexeme);
+                pdr(register);
+                break;
+            }
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
@@ -904,6 +923,85 @@ public class Assembler {
                     break;
             }
         } else throw new AssemblerException("Invalid Instruction format for MEX");
+    }
+
+    private static void pdr(String register) {
+        if(arrayContains(DWORD_REGISTERS, register)) {
+            System.out.print(register + " = ");
+            switch (register) {
+                case "RAD":
+                    System.out.println(Arrays.toString(RAD));
+                    break;
+                case "RBD":
+                    System.out.println(Arrays.toString(RBD));
+                    break;
+                case "RCD":
+                    System.out.println(Arrays.toString(RCD));
+                    break;
+                case "RDD":
+                    System.out.println(Arrays.toString(RDD));
+                    break;
+            }
+        }
+        else throw new AssemblerException("Incorrect Register for PDR: \"" + register + "\"");
+    }
+
+    private static void pwr(String register) {
+        if(arrayContains(WORD_REGISTERS, register)) {
+            System.out.print(register + " = ");
+            byte[] wreg = new byte[16];
+            switch (register) {
+                case "RAW":
+                    System.arraycopy(RAD, 16, wreg, 0, 16);
+                    break;
+                case "RBW":
+                    System.arraycopy(RBD, 16, wreg, 0, 16);
+                    break;
+                case "RCW":
+                    System.arraycopy(RCD, 16, wreg, 0, 16);
+                    break;
+                case "RDW":
+                    System.arraycopy(RDD, 16, wreg, 0, 16);
+                    break;
+            }
+            System.out.println(Arrays.toString(wreg));
+        }
+        else throw new AssemblerException("Incorrect Register for PWR: \"" + register + "\"");
+    }
+
+    private static void pbr(String register) {
+        if (arrayContains(BYTE_REGISTERS, register)) {
+            System.out.print(register + " = ");
+            byte[] breg = new byte[8];
+            switch (register) {
+                case "RAL":
+                    System.arraycopy(RAD, 24, breg,0, 8);
+                    break;
+                case "RAH":
+                    System.arraycopy(RAD, 16, breg,0, 8);
+                    break;
+                case "RBL":
+                    System.arraycopy(RBD, 24, breg,0, 8);
+                    break;
+                case "RBH":
+                    System.arraycopy(RBD, 16, breg,0, 8);
+                    break;
+                case "RCL":
+                    System.arraycopy(RCD, 24, breg,0, 8);
+                    break;
+                case "RCH":
+                    System.arraycopy(RCD, 16, breg,0, 8);
+                    break;
+                case "RDL":
+                    System.arraycopy(RDD, 24, breg,0, 8);
+                    break;
+                case "RDH":
+                    System.arraycopy(RDD, 16, breg,0, 8);
+                    break;
+            }
+            System.out.println(Arrays.toString(breg));
+        }
+        else throw new AssemblerException("Incorrect Register for PBR: \"" + register + "\"");
     }
 
     private static String trim(char[] array) {
