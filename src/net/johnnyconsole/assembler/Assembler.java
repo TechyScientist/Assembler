@@ -20,9 +20,9 @@ public class Assembler {
     //Flags: S Z O D P A
     private static final byte[] FLAGS = new byte[5],
                                 RLP = new byte[32],
-                                RDA = new byte[32],
-                                RDB = new byte[32],
-                                RDC = new byte[32],
+                                RAD = new byte[32],
+                                RBD = new byte[32],
+                                RCD = new byte[32],
                                 RDD = new byte[32];
 
     private static int lex() {
@@ -106,7 +106,357 @@ public class Assembler {
 
     private static void statement() {
         String statement = trim(lexeme);
+        switch (statement) {
+            case "MOV":
+                lex();
+                String reg1 = trim(lexeme);
+                lex();
+                if(nextToken != COMMA) throw new AssemblerException("Missing Symbol ',' for MOV on line " + lineNo);
+                lex();
+                String reg2 = trim(lexeme);
+                mov(reg1, reg2);
+                break;
+            default:
+                throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
+        }
+    }
 
+    private static byte[] toBinaryArray(int number, int bits) {
+        byte[] binary = new byte[bits];
+        if(number < 0 || number >= Math.pow(2, bits)) throw new AssemblerException("Immediate " + number + " is either negative or too large");
+        int i = bits - 1;
+        while(number != 0) {
+            binary[i--] = (byte)(number % 2);
+            number /= 2;
+        }
+        return binary;
+    }
+
+    private static boolean arrayContains(String[] array, String value) {
+        for (String s : array) {
+            if (s.equals(value)) return true;
+        }
+        return false;
+    }
+
+    private static void mov(String src, String dest) {
+        if(arrayContains(BYTE_REGISTERS, src) && arrayContains(BYTE_REGISTERS, dest)) {
+            if(src.equals(dest)) return;
+            switch(src) {
+                case "RAL":
+                    switch(dest) {
+                        case "RAH":
+                            System.arraycopy(RAD, 24, RAD, 16, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RAD, 24, RBD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RAD, 24, RBD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RAD, 24, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RAD, 24, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RAD, 24, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RAD, 24, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RAH":
+                    switch(dest) {
+                        case "RAL":
+                            System.arraycopy(RAD, 16, RAD, 24, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RAD, 16, RBD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RAD, 16, RBD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RAD, 16, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RAD, 16, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RAD, 16, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RAD, 16, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RBL":
+                    switch(dest) {
+                        case "RAH":
+                            System.arraycopy(RBD, 24, RAD, 16, 8);
+                            break;
+                        case "RAL":
+                            System.arraycopy(RBD, 24, RAD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RBD, 24, RBD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RBD, 24, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RBD, 24, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RBD, 24, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RBD, 24, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RBH":
+                    switch(dest) {
+                        case "RAL":
+                            System.arraycopy(RBD, 16, RAD, 24, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RBD, 16, RBD, 24,8);
+                            break;
+                        case "RAH":
+                            System.arraycopy(RBD, 16, RAD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RBD, 16, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RBD, 16, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RBD, 16, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RBD, 16, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RCL":
+                    switch(dest) {
+                        case "RAH":
+                            System.arraycopy(RCD, 24, RAD, 16, 8);
+                            break;
+                        case "RAL":
+                            System.arraycopy(RCD, 24, RAD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RCD, 24, RBD, 16, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RCD, 24, RBD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RCD, 24, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RCD, 24, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RCD, 24, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RCH":
+                    switch(dest) {
+                        case "RAL":
+                            System.arraycopy(RCD, 16, RAD, 24, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RCD, 16, RBD, 24,8);
+                            break;
+                        case "RAH":
+                            System.arraycopy(RCD, 16, RAD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RCD, 16, RCD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RCD, 16, RBD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RCD, 16, RDD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RCD, 16, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RDL":
+                    switch(dest) {
+                        case "RAH":
+                            System.arraycopy(RDD, 24, RAD, 16, 8);
+                            break;
+                        case "RAL":
+                            System.arraycopy(RDD, 24, RAD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RDD, 24, RBD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RDD, 24, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RDD, 24, RCD, 16, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RDD, 24, RBD, 24,8);
+                            break;
+                        case "RDH":
+                            System.arraycopy(RDD, 24, RDD, 16, 8);
+                            break;
+                    }
+                    break;
+                case "RDH":
+                    switch(dest) {
+                        case "RAL":
+                            System.arraycopy(RDD, 16, RAD, 24, 8);
+                            break;
+                        case "RBL":
+                            System.arraycopy(RDD, 16, RBD, 24,8);
+                            break;
+                        case "RAH":
+                            System.arraycopy(RDD, 16, RAD, 16, 8);
+                            break;
+                        case "RCL":
+                            System.arraycopy(RDD, 16, RCD, 24,8);
+                            break;
+                        case "RCH":
+                            System.arraycopy(RDD, 16, RCD, 16, 8);
+                            break;
+                        case "RDL":
+                            System.arraycopy(RDD, 16, RDD, 24,8);
+                            break;
+                        case "RBH":
+                            System.arraycopy(RDD, 16, RBD, 16, 8);
+                            break;
+                    }
+                    break;
+            }
+        } else if(arrayContains(WORD_REGISTERS, src) && arrayContains(WORD_REGISTERS, dest)) {
+            switch (src) {
+                case "RAW":
+                    switch (dest) {
+                        case "RBW":
+                            System.arraycopy(RAD, 16, RBD, 16, 16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(RAD, 16, RCD, 16, 16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(RAD, 16, RDD, 16, 16);
+                            break;
+                    }
+                    break;
+                case "RBW":
+                    switch (dest) {
+                        case "RAW":
+                            System.arraycopy(RBD, 16, RAD, 16, 16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(RBD, 16, RCD, 16, 16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(RBD, 16, RDD, 16, 16);
+                            break;
+                    }
+                    break;
+                case "RCW":
+                    switch (dest) {
+                        case "RAW":
+                            System.arraycopy(RCD, 16, RAD, 16, 16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(RCD, 16, RBD, 16, 16);
+                            break;
+                        case "RDW":
+                            System.arraycopy(RCD, 16, RDD, 16, 16);
+                            break;
+                    }
+                    break;
+                case "RDW":
+                    switch (dest) {
+                        case "RAW":
+                            System.arraycopy(RDD, 16, RAD, 16, 16);
+                            break;
+                        case "RCW":
+                            System.arraycopy(RDD, 16, RCD, 16, 16);
+                            break;
+                        case "RBW":
+                            System.arraycopy(RDD, 16, RBD, 16, 16);
+                            break;
+                    }
+                    break;
+            }
+        }
+        else if(arrayContains(DWORD_REGISTERS, src) && arrayContains(DWORD_REGISTERS, dest)) {
+            switch (src) {
+                case "RAD":
+                    switch (dest) {
+                        case "RBD":
+                            System.arraycopy(RAD, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(RAD, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(RAD, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RBD":
+                    switch (dest) {
+                        case "RAD":
+                            System.arraycopy(RBD, 0, RAD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(RBD, 0, RCD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(RBD, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RCD":
+                    switch (dest) {
+                        case "RBD":
+                            System.arraycopy(RCD, 0, RBD, 0, 32);
+                            break;
+                        case "RAD":
+                            System.arraycopy(RCD, 0, RAD, 0, 32);
+                            break;
+                        case "RDD":
+                            System.arraycopy(RCD, 0, RDD, 0, 32);
+                            break;
+                    }
+                    break;
+                case "RDD":
+                    switch (dest) {
+                        case "RBD":
+                            System.arraycopy(RDD, 0, RBD, 0, 32);
+                            break;
+                        case "RCD":
+                            System.arraycopy(RDD, 0, RCD, 0, 32);
+                            break;
+                        case "RAD":
+                            System.arraycopy(RDD, 0, RAD, 0, 32);
+                            break;
+                    }
+                    break;
+            }
+
+        } else throw new AssemblerException("Instruction operands (" + src + ", " + dest + ") must be the same size for MOV instruction");
     }
 
     private static String trim(char[] array) {

@@ -10,4 +10,7 @@
 
 <statements> -> {<statement>.}
 
-<statement> ->
+<statement> -> <move>
+
+Uses Destination-First Operand Ordering
+<move> -> MOV <byte_register>, <byte_register> | MOV <word_register>, <word_register> | MOV <dword_register>, <dword_register>
