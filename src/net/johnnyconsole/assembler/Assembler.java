@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-@SuppressWarnings("DuplicatedCode")
+@SuppressWarnings({"DuplicatedCode", "unused"})
 public class Assembler {
     private static int charClass, lexLen, nextToken, lineNo = -1;
     private static char nextChar;
@@ -21,8 +21,12 @@ public class Assembler {
     private static final int EOF = -1, LETTER = 0, DIGIT = 1, UNKNOWN = 99;
     private static final int INT_LIT = 10, IDENT = 11, COMMA = 20, PERIOD = 21, COLON = 22, SEMICOLON = 23;
 
-    //Flags: S Z O D P A
-    @SuppressWarnings("unused")
+    private static final int SIGN = 0,
+                             ZERO = 1,
+                             OVERFLOW = 2,
+                             GREATER = 3,
+                             LESS = 4;
+
     private static final byte[] FLAGS = new byte[5],
                                 RLP = new byte[32],
                                 RAD = new byte[32],
@@ -200,6 +204,13 @@ public class Assembler {
                 rin(register);
                 break;
             }
+            case "NEG": {
+                lex();
+                String register = trim(lexeme);
+                neg(register);
+                break;
+            }
+
             default:
                 throw new AssemblerException("Invalid Instruction: " + statement + " on line " + lineNo);
         }
@@ -1047,17 +1058,91 @@ public class Assembler {
     }
 
     private static void rin(String register) {
+        int in = 0;
         try {
             System.out.print("RIN > ");
-            int in = input.nextInt();
+            in = input.nextInt();
             mim(in, register);
         } catch (AssemblerException ex) {
             if(ex.getMessage().contains("MIM")) {
-                throw new AssemblerException("Incorrect Register for RIN: \"" + register + "\"");
+                throw new AssemblerException("Incorrect Register or Value for RIN: register=\"" + register + "\" value=\"" + in +"\"");
             }
             else {
                 throw ex;
             }
+        }
+    }
+
+    private static void neg(String register) {
+        if(arrayContains(DWORD_REGISTERS, register)) {
+            switch(register) {
+                case "RAD":
+                    negate(RAD, 0, 32);
+                    break;
+                case "RBD":
+                    negate(RBD, 0, 32);
+                    break;
+                case "RCD":
+                    negate(RCD, 0, 32);
+                    break;
+                case "RDD":
+                    negate(RDD, 0, 32);
+                    break;
+            }
+        } else if(arrayContains(WORD_REGISTERS, register)) {
+            switch(register) {
+                case "RAW":
+                    negate(RAD, 16, 32);
+                    break;
+                case "RBW":
+                    negate(RBD, 16, 32);
+                    break;
+                case "RCW":
+                    negate(RCD, 16, 32);
+                    break;
+                case "RDW":
+                    negate(RDD, 16, 32);
+                    break;
+            }
+        }
+        else if(arrayContains(BYTE_REGISTERS, register)) {
+            switch(register) {
+                case "RAH":
+                    negate(RAD, 16, 24);
+                    break;
+                case "RAL":
+                    negate(RAD, 24, 32);
+                    break;
+                case "RBH":
+                    negate(RBD, 16, 24);
+                    break;
+                case "RBL":
+                    negate(RBD, 24, 32);
+                    break;
+                case "RCH":
+                    negate(RCD, 16, 24);
+                    break;
+                case "RCL":
+                    negate(RCD, 24, 32);
+                    break;
+                case "RDH":
+                    negate(RDD, 16, 24);
+                    break;
+                case "RDL":
+                    negate(RDD, 24, 32);
+                    break;
+            }
+        }
+        else {
+            throw new AssemblerException("Invalid Register for NEG: \"" + register + "\"");
+
+        }
+    }
+
+    private static void negate(byte[] register, int start, int end) {
+        for(int i = start; i < end; i++) {
+            if(register[i] == 0) register[i] = 1;
+            else register[i] = 0;
         }
     }
 

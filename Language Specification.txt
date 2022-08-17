@@ -26,3 +26,5 @@ Uses Source-First Operand Ordering
 <block_comment> -> BCM <string> ECM
 
 <input> -> RIN <register>
+
+<negate> -> NEG <register>

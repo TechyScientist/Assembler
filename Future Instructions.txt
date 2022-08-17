@@ -9,5 +9,15 @@
 <rotate_left> -> RRL <register>, <immediate>
 <rotate_right> -> RRR <register>, <immediate>
 
-<negate> -> NEG <register>
 <complement> -> COM <register>
+
+<label> -> <string> LBL
+<jump> -> JMP <label>
+<cond_jump> -> (JPG | JGE | JEQ | JNE | JLE | JPL | JPS | JNS | JPO | JNO | JPZ | JNZ) <label>
+<proc_jump> -> JSB <label>
+
+<procedure> -> SUB <label> {<statement>} RET
+
+<push> -> PSH <register>
+<pop> -> POP <register>
+<stack_get> SGT <immediate>

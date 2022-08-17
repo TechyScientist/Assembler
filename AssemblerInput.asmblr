@@ -1,12 +1,7 @@
 ASSEMBLER BEGIN:
-CMT Test File.
-MIM 32767, RAW.
-MIM 2147483647, RBD.
-PDR RBD.
-MEX RAW, RBD.
-PDR RBD.
-RIN RCD.
-PDR RCD.
-BCM Test File made by Johnny Console
-this is for ASSEMBLER testing purposes ECM.
+MIM 255, RAH.
+PWR RAW.
+NEG RAH.
+NEG RAL.
+PWR RAW.
 ASSEMBLER END;
